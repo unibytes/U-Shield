@@ -81,5 +81,5 @@ func main() {
 	registerRoutes(mongoclient, ctx, apiroutes)
 
 	// run the server
-	log.Fatal(server.Run(":9090"))
+	log.Fatal(server.Run(":5555"))
 }
