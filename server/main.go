@@ -69,6 +69,13 @@ func main() {
 	ctx, mongoclient, server := connectMongoDB()
 	defer mongoclient.Disconnect(ctx)
 
+	// this is nothing but a homepage route
+	server.GET("/", func(ctx *gin.Context) {
+		ctx.JSON(200, gin.H{
+			"Homepage": "RESTAPIs",
+		})
+	})
+
 	// register api routes
 	apiroutes := server.Group("/api")
 	registerRoutes(mongoclient, ctx, apiroutes)
