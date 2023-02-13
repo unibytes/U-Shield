@@ -11,14 +11,14 @@ type User struct {
 	// maybe we should make this another collection, so one user can have multiple
 	// emergency contact
 	EmergencyContact []EmergencyContact `json:"emergencycontact" bson:"user_emergencycontact"`
+
+	Events []Event `json:"events" bson:"user_events"`
 }
 
 // whoami returns a collection name.
-func(u *User) whoami() string {
+func (u *User) whoami() string {
 	return "users"
 }
-
-
 
 type Address struct {
 	State   string `json:"state" bson:"state"`
@@ -31,4 +31,8 @@ type EmergencyContact struct {
 	Relation    string `json:"relation" bson:"relation"`
 	PhoneNumber string `json:"phonenumber" bson:"phonenumber"`
 	Email       string `json:"email" bson:"email"`
+}
+
+type Event struct {
+	Content string `json:"content" bson:"event_content"`
 }

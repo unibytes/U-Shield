@@ -23,17 +23,14 @@ const (
 var (
 	collNames = []string{
 		"users",
-		"events",
 	}
 
 	servicesBinding = map[string]func(usercollection *mongo.Collection, ctx context.Context) service.Service{
-		"users":  service.NewUserService,
-		"events": service.NewEventService,
+		"users": service.NewUserService,
 	}
 
 	controllersBinding = map[string]func(service service.Service) controller.Controller{
-		"users":  controller.NewUserController,
-		"events": controller.NewEventController,
+		"users": controller.NewUserController,
 	}
 )
 
