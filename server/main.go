@@ -56,5 +56,5 @@ func main() {
 	usercontroller.RegisterRoutes(apiroutes)
 
 	// run the server
-	log.Fatal(server.Run(":5555"))
+	log.Fatal(server.Run(":1111"))
 }

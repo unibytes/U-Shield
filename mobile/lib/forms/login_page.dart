@@ -1,10 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/components/inputbox.dart';
+import 'package:http/http.dart' as http;
+import 'package:mobile/forms/homepage.dart';
 
 import '../components/button.dart';
+import '../components/api.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,6 +19,27 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+
+  _login() async {
+    var data = {
+      'user_email': _emailController.text,
+      'user_password': _passwordController.text
+    };
+    var res = await API2().postData(data, 'login');
+    var body = json.decode(res.body);
+    if (res.statusCode == 200) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => userHome()));
+
+      print("work");
+    } else {
+      print(res.statusCode);
+      print(res.body);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,19 +50,6 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Ink(
-              //   decoration: const ShapeDecoration(
-              //     color: Color.fromRGBO(226, 232, 240, 1),
-              //     shape: CircleBorder(),
-              //   ),
-              //   child: IconButton(
-              //     icon: Icon(Icons.arrow_back),
-              //     color: Colors.black,
-              //     onPressed: () {
-              //       Navigator.pop(context);
-              //     },
-              //   ),
-              // ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 // crossAxisAlignment: CrossAxisAlignment.end,
@@ -52,26 +65,6 @@ class _LoginPageState extends State<LoginPage> {
                         "Back",
                         style: TextStyle(color: Color.fromRGBO(31, 84, 211, 1)),
                       )),
-                  // Text(
-                  //   "Login",
-                  //   textAlign: TextAlign.end,
-                  //   style: GoogleFonts.openSans(
-                  //     fontSize: 20,
-                  //     color: Color.fromRGBO(31, 84, 211, 1),
-                  //     fontWeight: FontWeight.w500,
-                  //   ),
-                  // ),
-
-                  // Text(
-                  //   "Login",
-                  //   textAlign: TextAlign.end,
-                  //   style: TextStyle(
-                  //     fontSize: 20,
-                  //     color: Colors.black,
-                  //     fontWeight: FontWeight.w800,
-                  //   ),
-                  // ),
-
                   Text(
                     "U-Shield",
                     textAlign: TextAlign.end,
@@ -104,9 +97,12 @@ class _LoginPageState extends State<LoginPage> {
                         style: TextStyle(fontSize: 19, color: Colors.black87),
                       ),
                     ),
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.only(top: 10),
-                      child: InputBox(hintText: "johndoe@gmail.com"),
+                      child: InputBox(
+                        hintText: "johndoe@gmail.com",
+                        controller: _emailController,
+                      ),
                     ),
                     const Padding(
                       padding: EdgeInsets.only(top: 20),
@@ -125,10 +121,14 @@ class _LoginPageState extends State<LoginPage> {
                       child: InputBox(
                         hintText: "Enter your password",
                         obscure: true,
+                        controller: _passwordController,
                       ),
                     ),
                     Button(
                       buttonContent: "Continue",
+                      onPressed: () {
+                        _login();
+                      },
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 20),
@@ -163,6 +163,9 @@ class _LoginPageState extends State<LoginPage> {
                           Button(
                             buttonContent: "Continue with Google",
                             iconName: "google",
+                            onPressed: () {
+                              _login();
+                            },
                           ),
                           SizedBox(
                             height: 10,
@@ -170,6 +173,9 @@ class _LoginPageState extends State<LoginPage> {
                           Button(
                             buttonContent: "Continue with Apple",
                             iconName: "apple",
+                            onPressed: () {
+                              _login();
+                            },
                           ),
                           SizedBox(
                             height: 10,
@@ -177,6 +183,9 @@ class _LoginPageState extends State<LoginPage> {
                           Button(
                             buttonContent: "Continue with FaceBook",
                             iconName: "facebook",
+                            onPressed: () {
+                              _login();
+                            },
                           ),
                         ],
                       ),

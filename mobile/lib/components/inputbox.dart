@@ -2,19 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
+
 class InputBox extends StatelessWidget {
   final String hintText;
   final bool obscure;
+  final TextEditingController controller;
 
   const InputBox({
-    super.key,
+    Key? key,
     required this.hintText,
     this.obscure = false,
-  });
+    required this.controller,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: controller,
       style: TextStyle(fontSize: 19),
       obscureText: obscure,
       decoration: InputDecoration(
