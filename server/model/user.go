@@ -1,23 +1,15 @@
 package model
 
 type User struct {
-	Email       string  `json:"email" bson:"user_email"`
-	Password    string  `json:"password" bson:"user_password"`
-	Name        string  `json:"name" bson:"user_name"`
-	Address     Address `json:"address" bson:"user_address"`
-	PhoneNumber string  `json:"phonenumber" bson:"user_phonenumber"`
+	Email       string  `json:"user_email" bson:"user_email"`
+	Password    string  `json:"user_password" bson:"user_password"`
+	Name        string  `json:"user_name" bson:"user_name"`
+	Address     Address `json:"user_address" bson:"user_address"`
+	PhoneNumber string  `json:"user_phonenumber" bson:"user_phonenumber"`
 
-	// [PENDING JOB]
-	// maybe we should make this another collection, so one user can have multiple
-	// emergency contact
-	EmergencyContact []EmergencyContact `json:"emergencycontact" bson:"user_emergencycontact"`
+	EmergencyContact []EmergencyContact `json:"user_emergencycontact" bson:"user_emergencycontact"`
 
-	Events []Event `json:"events" bson:"user_events"`
-}
-
-// whoami returns a collection name.
-func (u *User) whoami() string {
-	return "users"
+	Events []Event `json:"user_events" bson:"user_events"`
 }
 
 type Address struct {
@@ -28,11 +20,12 @@ type Address struct {
 }
 
 type EmergencyContact struct {
-	Relation    string `json:"relation" bson:"relation"`
-	PhoneNumber string `json:"phonenumber" bson:"phonenumber"`
-	Email       string `json:"email" bson:"email"`
+	Name        string `json:"emergency_name" bson:"emergency_name"`
+	Relation    string `json:"emergency_relation" bson:"emergency_relation"`
+	PhoneNumber string `json:"emergency_phonenumber" bson:"emergency_phonenumber"`
+	Email       string `json:"emergency_email" bson:"emergency_email"`
 }
 
 type Event struct {
-	Content string `json:"content" bson:"event_content"`
+	Content string `json:"event_content" bson:"event_content"`
 }

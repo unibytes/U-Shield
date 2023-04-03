@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../components/button.dart';
 import '../components/inputbox.dart';
 
@@ -15,6 +16,15 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final _userController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _userController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,19 +83,21 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             InputBox(
               hintText: "Enter first name",
+              controller: _userController,
             ),
             SizedBox(
               height: 15,
             ),
             InputBox(
               hintText: "Enter last name",
+              controller: _userController,
             ),
             SizedBox(
               height: 15,
             ),
             Row(
               children: [
-                Expanded(
+                const Expanded(
                   flex: 1,
                   child: CSCPicker(
                     dropdownDecoration: BoxDecoration(
@@ -107,28 +119,36 @@ class _RegisterPageState extends State<RegisterPage> {
                 //       "+1",
                 //       style: GoogleFonts.openSans(color: Colors.black),
                 //     )),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Expanded(
                   flex: 2,
                   child: TextFormField(
-                    decoration: InputDecoration(
-                        contentPadding: EdgeInsets.fromLTRB(15, 16, 15, 16),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                width: 2,
-                                color: Color.fromRGBO(31, 84, 211, 1))),
-                        hintText: "Mobile number",
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 17,
+                    decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.fromLTRB(15, 16, 15, 16),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 2,
+                          color: Color.fromRGBO(31, 84, 211, 1),
                         ),
-                        filled: true,
-                        fillColor: Color.fromRGBO(233, 236, 239, 0.7),
-                        border: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(width: 0, style: BorderStyle.none))),
+                      ),
+                      hintText: "Mobile number",
+                      hintStyle: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 17,
+                      ),
+                      filled: true,
+                      fillColor: Color.fromRGBO(233, 236, 239, 0.7),
+                      border: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(width: 0, style: BorderStyle.none),
+                      ),
+                    ),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                    ],
                     autofocus: false,
                   ),
                 ),
@@ -139,6 +159,10 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             Button(
               buttonContent: "Next",
+              onPressed: (() {
+                
+              }
+              ),
             )
           ])),
     );

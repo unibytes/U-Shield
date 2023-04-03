@@ -7,7 +7,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/unibytes/u-sheild/controller"
-	"github.com/unibytes/u-sheild/service"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -15,23 +14,9 @@ import (
 
 // configs
 const (
-	dbname = "u-sheild"
-	URI    = "mongodb+srv://admin:123@u-sheild.p8kad2d.mongodb.net/?retryWrites=true&w=majority"
-)
-
-// kind of like factory design pattern....
-var (
-	collNames = []string{
-		"users",
-	}
-
-	servicesBinding = map[string]func(usercollection *mongo.Collection, ctx context.Context) service.Service{
-		"users": service.NewUserService,
-	}
-
-	controllersBinding = map[string]func(service service.Service) controller.Controller{
-		"users": controller.NewUserController,
-	}
+	dbname     = "u-sheild"
+	collection = "users"
+	URI        = "mongodb+srv://admin:123@u-sheild.p8kad2d.mongodb.net/?retryWrites=true&w=majority"
 )
 
 // connectMongoDB establish mongo DB connection.
@@ -51,15 +36,6 @@ func connectMongoDB() (context.Context, *mongo.Client, *gin.Engine) {
 	return ctx, mongoclient, server
 }
 
-func registerRoutes(mongoclient *mongo.Client, ctx context.Context, routerGroup *gin.RouterGroup) {
-	for _, collName := range collNames {
-		curCollection := mongoclient.Database(dbname).Collection(collName)
-		curservice := servicesBinding[collName](curCollection, ctx)
-		curcontroller := controllersBinding[collName](curservice)
-		curcontroller.RegisterRoutes(routerGroup)
-	}
-}
-
 // entry point of the program
 // go run main.go to start up the server
 func main() {
@@ -75,8 +51,10 @@ func main() {
 
 	// register api routes
 	apiroutes := server.Group("/api")
-	registerRoutes(mongoclient, ctx, apiroutes)
+	usercollection := mongoclient.Database(dbname).Collection(collection)
+	usercontroller := controller.NewUserController(usercollection, ctx)
+	usercontroller.RegisterRoutes(apiroutes)
 
 	// run the server
-	log.Fatal(server.Run(":5555"))
+	log.Fatal(server.Run(":1111"))
 }
